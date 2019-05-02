@@ -1,0 +1,56 @@
+﻿@using Toolbelt.Blazor.SpeechRecognition
+@inject SpeechRecognition SpeechRecognition
+@implements IDisposable
+
+<button onclick="@OnClickStart">start</button>
+
+<button onclick="@OnClickStop">stop</button>
+
+<div>
+    @foreach (var result in this.Results)
+    {
+        if (result.IsFinal)
+        {
+            <text>@result.Items[0].Transcript</text>
+        }
+        else
+        {
+            <i style="color:#ddd;">@result.Items[0].Transcript</i>
+        }
+    }
+</div>
+
+@functions {
+    string Title = "Blazor";
+
+    SpeechRecognitionResult[] Results = new SpeechRecognitionResult[0];
+
+    protected override void OnInit()
+    {
+        //this.SpeechRecognition.Lang = "ja-JP";
+        this.SpeechRecognition.InterimResults = true;
+        this.SpeechRecognition.Continuous = true;
+        this.SpeechRecognition.Result += OnSpeechRecognized;
+    }
+
+    void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
+    {
+        this.Results = args.Results.Skip(args.ResultIndex).ToArray();
+        this.StateHasChanged();
+    }
+
+    void OnClickStart()
+    {
+        this.SpeechRecognition.Start();
+    }
+
+    void OnClickStop()
+    {
+        this.SpeechRecognition.Stop();
+    }
+
+    public void Dispose()
+    {
+        this.SpeechRecognition.Result -= OnSpeechRecognized;
+    }
+}
