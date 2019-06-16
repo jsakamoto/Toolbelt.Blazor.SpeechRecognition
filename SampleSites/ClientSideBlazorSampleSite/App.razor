@@ -2,9 +2,9 @@
 @inject SpeechRecognition SpeechRecognition
 @implements IDisposable
 
-<button onclick="@OnClickStart">start</button>
+<button @onclick="@OnClickStart">start</button>
 
-<button onclick="@OnClickStop">stop</button>
+<button @onclick="@OnClickStop">stop</button>
 
 <div>
     @foreach (var result in this.Results)
@@ -20,7 +20,7 @@
     }
 </div>
 
-@functions {
+@code {
     string Title = "Blazor";
 
     SpeechRecognitionResult[] Results = new SpeechRecognitionResult[0];

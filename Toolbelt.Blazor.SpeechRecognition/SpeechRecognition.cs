@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 using Microsoft.JSInterop;
 
 namespace Toolbelt.Blazor.SpeechRecognition
@@ -14,7 +11,7 @@ namespace Toolbelt.Blazor.SpeechRecognition
 
         private readonly IJSRuntime JSRuntime;
 
-        private DotNetObjectRef _ObjectRefOfThis;
+        private DotNetObjectRef<SpeechRecognition> _ObjectRefOfThis;
 
         public event EventHandler<SpeechRecognitionEventArgs> Result;
 
@@ -50,19 +47,19 @@ namespace Toolbelt.Blazor.SpeechRecognition
             JSRuntime = jsRuntime;
         }
 
-        private DotNetObjectRef GetObjectRef()
+        private DotNetObjectRef<SpeechRecognition> GetObjectRef()
         {
-            if (_ObjectRefOfThis == null) _ObjectRefOfThis = new DotNetObjectRef(this);
+            if (_ObjectRefOfThis == null) _ObjectRefOfThis = DotNetObjectRef.Create(this);
             return _ObjectRefOfThis;
         }
 
         internal SpeechRecognition Attach()
         {
-            Console.WriteLine("M-1: Attach");
+            // Console.WriteLine("M-1: Attach");
             this.JSRuntime.InvokeAsync<bool>(Namespace + ".attach", this.GetObjectRef())
                 .ContinueWith(t =>
                 {
-                    Console.WriteLine($"M-2: {t.Result}");
+                    // Console.WriteLine($"M-2: {t.Result}");
                     if (t.IsCompleted)
                     {
                         this.Available = t.Result;
@@ -84,7 +81,7 @@ namespace Toolbelt.Blazor.SpeechRecognition
         [JSInvokable(nameof(_OnResult)), EditorBrowsable(EditorBrowsableState.Never)]
         public void _OnResult(SpeechRecognitionEventArgs args)
         {
-            Console.WriteLine($"M-3: _OnResult: {Json.Serialize(args)}");
+            // Console.WriteLine($"M-3: _OnResult: {JsonSerializer.ToString(args)}");
             this.Result?.Invoke(this, args);
         }
     }
