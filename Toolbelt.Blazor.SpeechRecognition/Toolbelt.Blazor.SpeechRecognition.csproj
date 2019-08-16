@@ -26,15 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="tsconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="tsconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Browser" Version="3.0.0-preview6.19307.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.0.0-preview8.19405.7" />
   </ItemGroup>
 
 </Project>
