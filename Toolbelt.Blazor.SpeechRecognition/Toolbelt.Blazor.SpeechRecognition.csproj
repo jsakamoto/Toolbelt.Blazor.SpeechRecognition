@@ -8,7 +8,7 @@
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <Version>0.0.2.1-alpha</Version>
+    <Version>0.0.3.0-alpha</Version>
     <Authors>J.Sakamoto</Authors>
     <Description>SpeechRecognition API access for your Blazor apps.</Description>
     <Copyright>Copyright © 2019 J.Sakamoto, Mozilla Public License 2.0</Copyright>
@@ -34,7 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Browser" Version="3.0.0-preview6.19307.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.0.0-preview9.19424.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.0.0-preview9.19424.4" />
   </ItemGroup>
 
 </Project>

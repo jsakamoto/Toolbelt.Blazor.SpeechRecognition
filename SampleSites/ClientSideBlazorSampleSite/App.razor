@@ -2,9 +2,9 @@
 @inject SpeechRecognition SpeechRecognition
 @implements IDisposable
 
-<button @onclick="@OnClickStart">start</button>
+<button @onclick="OnClickStart" disabled="@(IsListening)">start</button>
 
-<button @onclick="@OnClickStop">stop</button>
+<button @onclick="OnClickStop" disabled="@(!IsListening)">stop</button>
 
 <div>
     @foreach (var result in this.Results)
@@ -21,11 +21,12 @@
 </div>
 
 @code {
-    string Title = "Blazor";
 
     SpeechRecognitionResult[] Results = new SpeechRecognitionResult[0];
 
-    protected override void OnInit()
+    bool IsListening = false;
+
+    protected override void OnInitialized()
     {
         //this.SpeechRecognition.Lang = "ja-JP";
         this.SpeechRecognition.InterimResults = true;
@@ -41,12 +42,20 @@
 
     void OnClickStart()
     {
-        this.SpeechRecognition.Start();
+        if (!this.IsListening)
+        {
+            this.IsListening = true;
+            this.SpeechRecognition.Start();
+        }
     }
 
     void OnClickStop()
     {
-        this.SpeechRecognition.Stop();
+        if (this.IsListening)
+        {
+            this.IsListening = false;
+            this.SpeechRecognition.Stop();
+        }
     }
 
     public void Dispose()

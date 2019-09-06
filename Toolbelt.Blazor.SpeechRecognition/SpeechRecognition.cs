@@ -11,7 +11,7 @@ namespace Toolbelt.Blazor.SpeechRecognition
 
         private readonly IJSRuntime JSRuntime;
 
-        private DotNetObjectRef<SpeechRecognition> _ObjectRefOfThis;
+        private DotNetObjectReference<SpeechRecognition> _ObjectRefOfThis;
 
         public event EventHandler<SpeechRecognitionEventArgs> Result;
 
@@ -47,24 +47,16 @@ namespace Toolbelt.Blazor.SpeechRecognition
             JSRuntime = jsRuntime;
         }
 
-        private DotNetObjectRef<SpeechRecognition> GetObjectRef()
+        private DotNetObjectReference<SpeechRecognition> GetObjectRef()
         {
-            if (_ObjectRefOfThis == null) _ObjectRefOfThis = DotNetObjectRef.Create(this);
+            if (_ObjectRefOfThis == null) _ObjectRefOfThis = DotNetObjectReference.Create(this);
             return _ObjectRefOfThis;
         }
 
         internal SpeechRecognition Attach()
         {
             // Console.WriteLine("M-1: Attach");
-            this.JSRuntime.InvokeAsync<bool>(Namespace + ".attach", this.GetObjectRef())
-                .ContinueWith(t =>
-                {
-                    // Console.WriteLine($"M-2: {t.Result}");
-                    if (t.IsCompleted)
-                    {
-                        this.Available = t.Result;
-                    }
-                });
+            this.Available = (this.JSRuntime as IJSInProcessRuntime).Invoke<bool>(Namespace + ".attach", this.GetObjectRef());
             return this;
         }
 

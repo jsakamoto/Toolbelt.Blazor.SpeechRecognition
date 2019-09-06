@@ -12,7 +12,7 @@ This is a class library for Blazor app to provide Speech Recognition API access.
 **Step.1-1** Install the library via NuGet package, like this.
 
 ```shell
-> dotnet add package Toolbelt.Blazor.SpeechRecognition --version 0.0.2.1-alpha
+> dotnet add package Toolbelt.Blazor.SpeechRecognition --version 0.0.3.0-alpha
 ```
 
 **Step.1-2** Register "SpeechRecognition" service into the DI container, at `ConfigureService` method in the `Startup` class of your Blazor application.
@@ -44,7 +44,7 @@ public class Startup
 **Step.2-2**  Subscribe `Result` event of the SpeechRecognition service to receive the results of speech recognition.
 
 ```csharp
-protected override void OnInit()
+protected override void OnInitialized()
 {
   this.SpeechRecognition.Result += OnSpeechRecognized;
 }
