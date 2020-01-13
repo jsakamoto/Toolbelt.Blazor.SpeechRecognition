@@ -5,16 +5,18 @@ VisualStudioVersion = 16.0.28809.33
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolbelt.Blazor.SpeechRecognition", "Toolbelt.Blazor.SpeechRecognition\Toolbelt.Blazor.SpeechRecognition.csproj", "{F4FBD89A-7024-4A8C-A045-2B313295F466}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSideBlazorSampleSite", "SampleSites\ClientSideBlazorSampleSite\ClientSideBlazorSampleSite.csproj", "{D9AD870C-ABC2-4366-ABC2-202510510BCB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleSites", "SampleSites", "{8179E9F9-CDA1-45C9-B756-201E199C42EF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientSide", "ClientSide", "{E0B55410-0D2C-4DCA-9463-CB42186AF35B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{AEDFC8CA-4940-4DD9-94B1-CC25AC1D3F63}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSite.Components", "SampleSites\SampleSite.Components\SampleSite.Components.csproj", "{363C0011-36CD-4FDB-8842-D04B364E4B40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSite.Client", "SampleSites\SampleSite.Client\SampleSite.Client.csproj", "{64E88DAA-A721-4D58-B80C-7B0262123937}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSite.Server", "SampleSites\SampleSite.Server\SampleSite.Server.csproj", "{59149CDD-38A1-4D1D-9D1A-07A15465A858}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,17 +28,26 @@ Global
 		{F4FBD89A-7024-4A8C-A045-2B313295F466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4FBD89A-7024-4A8C-A045-2B313295F466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4FBD89A-7024-4A8C-A045-2B313295F466}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9AD870C-ABC2-4366-ABC2-202510510BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9AD870C-ABC2-4366-ABC2-202510510BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9AD870C-ABC2-4366-ABC2-202510510BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9AD870C-ABC2-4366-ABC2-202510510BCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363C0011-36CD-4FDB-8842-D04B364E4B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363C0011-36CD-4FDB-8842-D04B364E4B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363C0011-36CD-4FDB-8842-D04B364E4B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363C0011-36CD-4FDB-8842-D04B364E4B40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64E88DAA-A721-4D58-B80C-7B0262123937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E88DAA-A721-4D58-B80C-7B0262123937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E88DAA-A721-4D58-B80C-7B0262123937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E88DAA-A721-4D58-B80C-7B0262123937}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D9AD870C-ABC2-4366-ABC2-202510510BCB} = {E0B55410-0D2C-4DCA-9463-CB42186AF35B}
-		{E0B55410-0D2C-4DCA-9463-CB42186AF35B} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
+		{363C0011-36CD-4FDB-8842-D04B364E4B40} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
+		{64E88DAA-A721-4D58-B80C-7B0262123937} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
+		{59149CDD-38A1-4D1D-9D1A-07A15465A858} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CCF99FF-7770-4E09-B6F9-61BD869AC7A7}

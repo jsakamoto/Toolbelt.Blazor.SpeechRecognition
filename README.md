@@ -4,6 +4,12 @@
 
 This is a class library for Blazor app to provide Speech Recognition API access.
 
+## Requirements
+
+[Blazor](https://blazor.net/) v.3.1.0 Preview 4.
+
+Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server App" (a.k.a."Server-side Blazor") are supoorted.
+
 
 ## How to install and use?
 
@@ -12,7 +18,7 @@ This is a class library for Blazor app to provide Speech Recognition API access.
 **Step.1-1** Install the library via NuGet package, like this.
 
 ```shell
-> dotnet add package Toolbelt.Blazor.SpeechRecognition --version 0.0.3-alpha
+> dotnet add package Toolbelt.Blazor.SpeechRecognition --version 0.0.4.6-alpha
 ```
 
 **Step.1-2** Register "SpeechRecognition" service into the DI container, at `ConfigureService` method in the `Startup` class of your Blazor application.
@@ -55,12 +61,12 @@ void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
 }
 ```
 
-**Step.2-3** Invoke `start()` method of the SpeechRecognition service when you want to start speech recognition.
+**Step.2-3** Invoke `StartAsync()` method of the SpeechRecognition service when you want to start speech recognition.
 
 ```csharp
-void OnClickStart()
+async Task OnClickStart()
 {
-  this.SpeechRecognition.Start();
+  await this.SpeechRecognition.StartAsync();
 }
 ```
 
@@ -79,7 +85,34 @@ void OnClickStart()
 }
 ```
 
-See also [sample code on the GitHub repository](https://github.com/jsakamoto/Toolbelt.Blazor.SpeechRecognition/blob/master/SampleSites/ClientSideBlazorSampleSite/App.razor).
+See also [sample code on the GitHub repository](https://github.com/jsakamoto/Toolbelt.Blazor.SpeechRecognition/blob/master/SampleSites/SampleSite.Components/App.razor).
+
+### Configuration
+
+The calling of `services.AddSpeechRecognition()` injects the references of JavaScript file (.js) - which is bundled with this package - into your page automatically.
+
+If you don't want this behavior, you can disable these automatic injection, please call `services.AddSpeechRecognition()` with configuration action like this:
+
+```csharp
+services.AddSpeechRecognition(options =>
+{
+  // If you don't want automatic injection of js file, add bellow;
+  options.DisableClientScriptAutoInjection = true;
+});
+```
+
+You can inject the helper JavaScript file manually. The URLs is bellow:
+
+- `_content/Toolbelt.Blazor.SpeechRecognition/script.min.js`
+
+## Release Note
+
+- **v.0.0.4-alpha**
+    - Upgrade Blazor to v.3.1.0 Preview 4.
+    - Add support for Blazor Server App (Server-side Blazor).
+- **v.0.0.3-alpha** - Upgrade Blazor to v.3.0.0 Preview 9.
+- **v.0.0.2-alpha** - Upgrade Blazor to v.3.0.0 Preview 6.
+- **v.0.0.1-alpha** - 1st release.
 
 ## License
 

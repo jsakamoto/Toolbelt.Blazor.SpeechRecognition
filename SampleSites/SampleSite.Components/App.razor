@@ -2,6 +2,13 @@
 @inject SpeechRecognition SpeechRecognition
 @implements IDisposable
 
+<div>
+    <select @onchange="OnChangeLang" disabled="@(IsListening)">
+        <option selected>en-US</option>
+        <option>ja-JP</option>
+    </select>
+</div>
+
 <button @onclick="OnClickStart" disabled="@(IsListening)">start</button>
 
 <button @onclick="OnClickStop" disabled="@(!IsListening)">stop</button>
@@ -28,38 +35,54 @@
 
     protected override void OnInitialized()
     {
-        //this.SpeechRecognition.Lang = "ja-JP";
+        this.SpeechRecognition.Lang = "en-US";
         this.SpeechRecognition.InterimResults = true;
         this.SpeechRecognition.Continuous = true;
         this.SpeechRecognition.Result += OnSpeechRecognized;
+        this.SpeechRecognition.End += OnSpeechEnded;
     }
 
-    void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
+    private void OnChangeLang(ChangeEventArgs args)
+    {
+        this.SpeechRecognition.Lang = args.Value.ToString();
+    }
+
+    private void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
     {
         this.Results = args.Results.Skip(args.ResultIndex).ToArray();
         this.StateHasChanged();
     }
 
-    void OnClickStart()
+    private async Task OnClickStart()
     {
         if (!this.IsListening)
         {
             this.IsListening = true;
-            this.SpeechRecognition.Start();
+            await this.SpeechRecognition.StartAsync();
         }
     }
 
-    void OnClickStop()
+    private async Task OnClickStop()
     {
         if (this.IsListening)
         {
             this.IsListening = false;
-            this.SpeechRecognition.Stop();
+            await this.SpeechRecognition.StopAsync();
+        }
+    }
+
+    private void OnSpeechEnded(object sender, EventArgs args)
+    {
+        if (this.IsListening)
+        {
+            this.IsListening = false;
+            this.StateHasChanged();
         }
     }
 
     public void Dispose()
     {
         this.SpeechRecognition.Result -= OnSpeechRecognized;
+        this.SpeechRecognition.End -= OnSpeechEnded;
     }
 }

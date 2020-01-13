@@ -1,28 +1,33 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
 namespace Toolbelt.Blazor.SpeechRecognition
 {
     public class SpeechRecognition
     {
-        private static readonly string Namespace = "Toolbelt.Blazor.SpeechRecognitionProxy";
+        private static readonly string Prefix = "Toolbelt.Blazor.SpeechRecognitionProxy.";
 
-        private readonly IJSRuntime JSRuntime;
+        internal readonly SpeechRecognitionOptions Options = new SpeechRecognitionOptions();
+
+        private readonly IJSRuntime _JSRuntime;
 
         private DotNetObjectReference<SpeechRecognition> _ObjectRefOfThis;
 
         public event EventHandler<SpeechRecognitionEventArgs> Result;
 
-        public bool Available { get; private set; }
+        public event EventHandler End;
+
+        private ValueTask<bool> AvailableTask;
 
         private string _Lang = "";
 
         public string Lang
         {
             get => _Lang;
-            set { if (_Lang != value) { _Lang = value; JSRuntime.InvokeAsync<object>(Namespace + ".lang", _Lang); } }
+            set { if (_Lang != value) { _Lang = value; InvokeJSVoidAsync("lang", _Lang); } }
         }
 
         private bool _Continuous;
@@ -30,7 +35,7 @@ namespace Toolbelt.Blazor.SpeechRecognition
         public bool Continuous
         {
             get => _Continuous;
-            set { if (_Continuous != value) { _Continuous = value; JSRuntime.InvokeAsync<object>(Namespace + ".continuous", _Continuous); } }
+            set { if (_Continuous != value) { _Continuous = value; InvokeJSVoidAsync("continuous", _Continuous); } }
         }
 
 
@@ -39,12 +44,40 @@ namespace Toolbelt.Blazor.SpeechRecognition
         public bool InterimResults
         {
             get => _InterimResults;
-            set { if (_InterimResults != value) { _InterimResults = value; JSRuntime.InvokeAsync<object>(Namespace + ".interimResults", _InterimResults); } }
+            set { if (_InterimResults != value) { _InterimResults = value; InvokeJSVoidAsync("interimResults", _InterimResults); } }
         }
 
         public SpeechRecognition(IJSRuntime jsRuntime)
         {
-            JSRuntime = jsRuntime;
+            _JSRuntime = jsRuntime;
+        }
+
+        private bool ScriptLoaded = false;
+
+        private SemaphoreSlim Syncer = new SemaphoreSlim(1, 1);
+
+        private async ValueTask InvokeJSVoidAsync(string identifier, params object[] args)
+        {
+            await InvokeJSAsync<object>(identifier, args);
+        }
+
+        private async ValueTask<T> InvokeJSAsync<T>(string identifier, params object[] args)
+        {
+            if (!ScriptLoaded && !this.Options.DisableClientScriptAutoInjection)
+            {
+                await Syncer.WaitAsync();
+                try
+                {
+                    if (!ScriptLoaded)
+                    {
+                        const string scriptPath = "_content/Toolbelt.Blazor.SpeechRecognition/script.min.js";
+                        await _JSRuntime.InvokeVoidAsync("eval", "new Promise(r=>((d,t,s)=>(h=>h.querySelector(t+`[src=\"${s}\"]`)?r():(e=>(e.src=s,e.onload=r,h.appendChild(e)))(d.createElement(t)))(d.head))(document,'script','" + scriptPath + "'))");
+                        ScriptLoaded = true;
+                    }
+                }
+                finally { Syncer.Release(); }
+            }
+            return await _JSRuntime.InvokeAsync<T>(Prefix + identifier, args);
         }
 
         private DotNetObjectReference<SpeechRecognition> GetObjectRef()
@@ -55,26 +88,35 @@ namespace Toolbelt.Blazor.SpeechRecognition
 
         internal SpeechRecognition Attach()
         {
-            // Console.WriteLine("M-1: Attach");
-            this.Available = (this.JSRuntime as IJSInProcessRuntime).Invoke<bool>(Namespace + ".attach", this.GetObjectRef());
+            this.AvailableTask = InvokeJSAsync<bool>("attach", this.GetObjectRef());
             return this;
         }
 
-        public void Start()
+        public ValueTask<bool> IsAvailableAsync()
         {
-            this.JSRuntime.InvokeAsync<bool>(Namespace + ".start");
+            return this.AvailableTask;
         }
 
-        public void Stop()
+        public ValueTask StartAsync()
         {
-            this.JSRuntime.InvokeAsync<bool>(Namespace + ".stop");
+            return InvokeJSVoidAsync("start");
+        }
+
+        public ValueTask StopAsync()
+        {
+            return InvokeJSVoidAsync("stop");
         }
 
         [JSInvokable(nameof(_OnResult)), EditorBrowsable(EditorBrowsableState.Never)]
         public void _OnResult(SpeechRecognitionEventArgs args)
         {
-            // Console.WriteLine($"M-3: _OnResult: {JsonSerializer.ToString(args)}");
             this.Result?.Invoke(this, args);
+        }
+
+        [JSInvokable(nameof(_OnEnd)), EditorBrowsable(EditorBrowsableState.Never)]
+        public void _OnEnd()
+        {
+            this.End?.Invoke(this, EventArgs.Empty);
         }
     }
 }

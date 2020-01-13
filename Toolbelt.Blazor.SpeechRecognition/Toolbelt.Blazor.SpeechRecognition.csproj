@@ -3,39 +3,50 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>true</IsPackable>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>Latest</LangVersion>
     <RazorLangVersion>3.0</RazorLangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <Version>0.0.3.0-alpha</Version>
+    <Version>0.0.4.6-alpha</Version>
     <Authors>J.Sakamoto</Authors>
     <Description>SpeechRecognition API access for your Blazor apps.</Description>
-    <Copyright>Copyright © 2019 J.Sakamoto, Mozilla Public License 2.0</Copyright>
+    <Copyright>Copyright © 2019-2020 J.Sakamoto, Mozilla Public License 2.0</Copyright>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/jsakamoto/Toolbelt.Blazor.SpeechRecognition</PackageProjectUrl>
     <PackageTags>blazor,speech,speechrecognition</PackageTags>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <PackageOutputPath>..\_dist\</PackageOutputPath>
+    <PackageReleaseNotes>v.0.0.4-alpha
+- Upgrade Blazor to v.3.1.0 Preview 4.
+- Add support for Blazor Server App (Server-side Blazor).
+v.0.0.3-alpha
+- Upgrade Blazor to v.3.0.0 Preview 9.
+v.0.0.2-alpha
+- Upgrade Blazor to v.3.0.0 Preview 6.
+v.0.0.1-alpha
+- 1st release.
+</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- .js/.css files will be referenced via <script>/<link> tags; other content files will just be included in the app's 'dist' directory without any tags referencing them -->
-    <EmbeddedResource Include="content\**\*.js" LogicalName="blazor:js:%(RecursiveDir)%(Filename)%(Extension)" />
-    <EmbeddedResource Include="content\**\*.css" LogicalName="blazor:css:%(RecursiveDir)%(Filename)%(Extension)" />
-    <EmbeddedResource Include="content\**" Exclude="**\*.ts;**\*.js;**\*.css" LogicalName="blazor:file:%(RecursiveDir)%(Filename)%(Extension)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.0.0" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="tsconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="tsconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.0.0-preview9.19424.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.0.0-preview9.19424.4" />
+    <Content Update="**\*.json">
+      <Pack>false</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>
