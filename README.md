@@ -6,7 +6,7 @@ This is a class library for Blazor app to provide Speech Recognition API access.
 
 ## Requirements
 
-[Blazor](https://blazor.net/) v.3.1.0 Preview 4.
+[Blazor](https://blazor.net/) v.3.1.0 Preview 4 or later.
 
 Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server App" (a.k.a."Server-side Blazor") are supoorted.
 
@@ -21,7 +21,9 @@ Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server Ap
 > dotnet add package Toolbelt.Blazor.SpeechRecognition --version 0.0.4.6-alpha
 ```
 
-**Step.1-2** Register "SpeechRecognition" service into the DI container, at `ConfigureService` method in the `Startup` class of your Blazor application.
+**Step.1-2** Register "SpeechRecognition" service into the DI container.
+
+If the project is a Blazor Server App or a Blazor WebAssembly App ver.3.1 Preview 4 or earlyer, add the code into the `ConfigureService` method in the `Startup` class of your Blazor application.
 
 ```csharp
 // Startup.cs
@@ -33,6 +35,23 @@ public class Startup
   public void ConfigureServices(IServiceCollection services)
   {
     services.AddSpeechRecognition(); // <- Add this line.
+    ...
+```
+
+If the project is a Blazor WebAssembly App ver.3.2 Preview 1 or later, add the code into the `Main` method in the `Program` class of your Blazor application.
+
+```csharp
+// Program.cs
+
+using Toolbelt.Blazor.Extensions.DependencyInjection; // <- Add this, and...
+...
+public class Program
+{
+  public static async Task Main(string[] args)
+  {
+    var builder = WebAssemblyHostBuilder.CreateDefault(args);
+    ...
+    builder.Services.AddSpeechRecognition(); // <- Add this line.
     ...
 ```
 
