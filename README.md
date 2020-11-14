@@ -6,7 +6,7 @@ This is a class library for Blazor app to provide Speech Recognition API access.
 
 ## Requirements
 
-[Blazor](https://blazor.net/) v.3.1.0 Preview 4 or later.
+[Blazor](https://blazor.net/) v.3.1.0 Preview 4, 3.2, 5.0 or later.
 
 Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server App" (a.k.a."Server-side Blazor") are supoorted.
 
