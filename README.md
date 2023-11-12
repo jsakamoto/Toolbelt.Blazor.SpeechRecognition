@@ -18,7 +18,7 @@ Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server Ap
 **Step.1-1** Install the library via NuGet package, like this.
 
 ```shell
-> dotnet add package Toolbelt.Blazor.SpeechRecognition --version 0.0.4.6-alpha
+> dotnet add package Toolbelt.Blazor.SpeechRecognition --prerelease
 ```
 
 **Step.1-2** Register "SpeechRecognition" service into the DI container.
@@ -126,6 +126,7 @@ You can inject the helper JavaScript file manually. The URLs is bellow:
 
 ## Release Note
 
+- **v.0.0.5-alpha** - Fix: the `DisableClientScriptAutoInjection` option is not assignable.
 - **v.0.0.4-alpha**
     - Upgrade Blazor to v.3.1.0 Preview 4.
     - Add support for Blazor Server App (Server-side Blazor).

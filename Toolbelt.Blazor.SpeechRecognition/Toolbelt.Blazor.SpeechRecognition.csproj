@@ -8,10 +8,10 @@
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <Version>0.0.4.6-alpha</Version>
+    <Version>0.0.5-alpha</Version>
     <Authors>J.Sakamoto</Authors>
     <Description>SpeechRecognition API access for your Blazor apps.</Description>
-    <Copyright>Copyright © 2019-2020 J.Sakamoto, Mozilla Public License 2.0</Copyright>
+    <Copyright>Copyright © 2019-2023 J.Sakamoto, Mozilla Public License 2.0</Copyright>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/jsakamoto/Toolbelt.Blazor.SpeechRecognition</PackageProjectUrl>
     <PackageTags>blazor,speech,speechrecognition</PackageTags>
@@ -19,7 +19,9 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PackageOutputPath>..\_dist\</PackageOutputPath>
-    <PackageReleaseNotes>v.0.0.4-alpha
+    <PackageReleaseNotes>v.0.0.5-alpha
+- Fix: the "DisableClientScriptAutoInjection" option is not assignable.
+v.0.0.4-alpha
 - Upgrade Blazor to v.3.1.0 Preview 4.
 - Add support for Blazor Server App (Server-side Blazor).
 v.0.0.3-alpha
