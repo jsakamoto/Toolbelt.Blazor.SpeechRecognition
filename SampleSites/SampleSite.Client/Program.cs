@@ -1,22 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SampleSite.Components;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
-namespace SampleSite.Client
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
+builder.Services.AddSpeechRecognition(options =>
 {
-    public class Program
-    {
-        public static async Task Main(string[] args)
-        {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
-            builder.Services.AddSpeechRecognition(options =>
-            {
-                // options.DisableClientScriptAutoInjection = true;
-            });
+    // options.DisableClientScriptAutoInjection = true;
+});
 
-            await builder.Build().RunAsync();
-        }
-    }
-}
+await builder.Build().RunAsync();
