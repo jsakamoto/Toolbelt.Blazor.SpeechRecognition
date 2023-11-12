@@ -4,5 +4,5 @@ public class SpeechRecognitionEventArgs
 {
     public int ResultIndex { get; set; }
 
-    public SpeechRecognitionResult[] Results { get; set; }
+    public SpeechRecognitionResult[]? Results { get; set; }
 }

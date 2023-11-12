@@ -2,7 +2,7 @@
 
 public class SpeechRecognitionAlternative
 {
-    public string Transcript { get; set; }
+    public string? Transcript { get; set; }
 
     public double Confidence { get; set; }
 }

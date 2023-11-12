@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Microsoft.JSInterop;
 
 namespace Toolbelt.Blazor.SpeechRecognition;
@@ -14,11 +11,11 @@ public class SpeechRecognition
 
     private readonly IJSRuntime _JSRuntime;
 
-    private DotNetObjectReference<SpeechRecognition> _ObjectRefOfThis;
+    private DotNetObjectReference<SpeechRecognition>? _ObjectRefOfThis;
 
-    public event EventHandler<SpeechRecognitionEventArgs> Result;
+    public event EventHandler<SpeechRecognitionEventArgs>? Result;
 
-    public event EventHandler End;
+    public event EventHandler? End;
 
     private ValueTask<bool> AvailableTask;
 
