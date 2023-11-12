@@ -6,8 +6,8 @@
     public class SpeechRecognitionOptions
     {
         /// <summary>
-        /// Gets a value that determines whether or not to inject client script automatically for "SpeechRecognition" service.
+        /// Gets or sets a value that determines whether or not to inject client script automatically for "SpeechRecognition" service.
         /// </summary>
-        public bool DisableClientScriptAutoInjection { get; }
+        public bool DisableClientScriptAutoInjection { get; set; }
     }
 }
