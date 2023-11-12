@@ -6,7 +6,7 @@
     <LangVersion>Latest</LangVersion>
     <RazorLangVersion>3.0</RazorLangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>5.0</TypeScriptToolsVersion>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <Version>0.0.5-alpha</Version>
     <Authors>J.Sakamoto</Authors>
@@ -38,11 +38,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.3">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.2.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435">
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
