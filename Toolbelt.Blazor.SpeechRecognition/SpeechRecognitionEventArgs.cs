@@ -1,9 +1,8 @@
-﻿namespace Toolbelt.Blazor.SpeechRecognition
-{
-    public class SpeechRecognitionEventArgs
-    {
-        public int ResultIndex { get; set; }
+﻿namespace Toolbelt.Blazor.SpeechRecognition;
 
-        public SpeechRecognitionResult[] Results { get; set; }
-    }
+public class SpeechRecognitionEventArgs
+{
+    public int ResultIndex { get; set; }
+
+    public SpeechRecognitionResult[] Results { get; set; }
 }

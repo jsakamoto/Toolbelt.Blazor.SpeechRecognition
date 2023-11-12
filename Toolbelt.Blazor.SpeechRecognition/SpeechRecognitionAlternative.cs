@@ -1,9 +1,8 @@
-﻿namespace Toolbelt.Blazor.SpeechRecognition
-{
-    public class SpeechRecognitionAlternative
-    {
-        public string Transcript { get; set; }
+﻿namespace Toolbelt.Blazor.SpeechRecognition;
 
-        public double Confidence { get; set; }
-    }
+public class SpeechRecognitionAlternative
+{
+    public string Transcript { get; set; }
+
+    public double Confidence { get; set; }
 }
