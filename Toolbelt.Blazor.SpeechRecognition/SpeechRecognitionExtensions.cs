@@ -19,14 +19,15 @@ public static class SpeechRecognitionExtensions
     ///  Adds a SpeechRecognition service to the specified Microsoft.Extensions.DependencyInjection.IServiceCollection.
     /// </summary>
     /// <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add the service to.</param>
+    /// <param name="configure">A delegate that is used to configure the SpeechRecognitionOptions.</param>
     public static IServiceCollection AddSpeechRecognition(this IServiceCollection services, Action<SpeechRecognitionOptions>? configure)
     {
         services.AddScoped(serviceProvider =>
         {
             var jsRuntime = serviceProvider.GetRequiredService<IJSRuntime>();
             var speechRecognitionService = new global::Toolbelt.Blazor.SpeechRecognition.SpeechRecognition(jsRuntime);
-            speechRecognitionService.Attach();
             configure?.Invoke(speechRecognitionService.Options);
+            speechRecognitionService.Attach();
             return speechRecognitionService;
         });
         return services;
