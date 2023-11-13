@@ -6,7 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.13" />
-    <PackageReference Include="Toolbelt.Blazor.SpeechRecognition" Version="0.0.5-alpha" />
+    <!--<PackageReference Include="Toolbelt.Blazor.SpeechRecognition" Version="0.0.5-alpha" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Toolbelt.Blazor.SpeechRecognition\Toolbelt.Blazor.SpeechRecognition.csproj" />
   </ItemGroup>
 
 </Project>

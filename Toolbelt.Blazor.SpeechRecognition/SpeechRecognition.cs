@@ -1,17 +1,20 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using Microsoft.JSInterop;
 
 namespace Toolbelt.Blazor.SpeechRecognition;
 
-public class SpeechRecognition
+public class SpeechRecognition : IAsyncDisposable
 {
-    private static readonly string Prefix = "Toolbelt.Blazor.SpeechRecognitionProxy.";
+    private static readonly string Prefix = "Toolbelt.Blazor.SpeechRecognition.";
 
-    internal readonly SpeechRecognitionOptions Options = new SpeechRecognitionOptions();
+    internal readonly SpeechRecognitionOptions Options = new();
 
     private readonly IJSRuntime _JSRuntime;
 
-    private DotNetObjectReference<SpeechRecognition>? _ObjectRefOfThis;
+    private IJSObjectReference? _JSModule = null;
+
+    private DotNetObjectReference<SpeechRecognition>? _objectRefOfThis;
 
     public event EventHandler<SpeechRecognitionEventArgs>? Result;
 
@@ -19,39 +22,20 @@ public class SpeechRecognition
 
     private ValueTask<bool> AvailableTask;
 
-    private string _Lang = "";
+    public string? Lang { get; set; }
 
-    public string Lang
-    {
-        get => this._Lang;
-        set { if (this._Lang != value) { this._Lang = value; this.InvokeJSVoidAsync("lang", this._Lang); } }
-    }
+    public bool Continuous { get; set; }
 
-    private bool _Continuous;
-
-    public bool Continuous
-    {
-        get => this._Continuous;
-        set { if (this._Continuous != value) { this._Continuous = value; this.InvokeJSVoidAsync("continuous", this._Continuous); } }
-    }
-
-
-    private bool _InterimResults;
-
-    public bool InterimResults
-    {
-        get => this._InterimResults;
-        set { if (this._InterimResults != value) { this._InterimResults = value; this.InvokeJSVoidAsync("interimResults", this._InterimResults); } }
-    }
+    public bool InterimResults { get; set; }
 
     public SpeechRecognition(IJSRuntime jsRuntime)
     {
         this._JSRuntime = jsRuntime;
     }
 
-    private bool ScriptLoaded = false;
+    private bool _scriptLoaded = false;
 
-    private SemaphoreSlim Syncer = new SemaphoreSlim(1, 1);
+    private SemaphoreSlim _syncer = new SemaphoreSlim(1, 1);
 
     private async ValueTask InvokeJSVoidAsync(string identifier, params object[] args)
     {
@@ -60,27 +44,50 @@ public class SpeechRecognition
 
     private async ValueTask<T> InvokeJSAsync<T>(string identifier, params object[] args)
     {
-        if (!this.ScriptLoaded && !this.Options.DisableClientScriptAutoInjection)
+        if (!this._scriptLoaded)
         {
-            await this.Syncer.WaitAsync();
+            await this._syncer.WaitAsync();
             try
             {
-                if (!this.ScriptLoaded)
+                if (!this._scriptLoaded)
                 {
-                    const string scriptPath = "_content/Toolbelt.Blazor.SpeechRecognition/script.min.js";
-                    await this._JSRuntime.InvokeVoidAsync("eval", "new Promise(r=>((d,t,s)=>(h=>h.querySelector(t+`[src=\"${s}\"]`)?r():(e=>(e.src=s,e.onload=r,h.appendChild(e)))(d.createElement(t)))(d.head))(document,'script','" + scriptPath + "'))");
-                    this.ScriptLoaded = true;
+                    if (!this.Options.DisableClientScriptAutoInjection)
+                    {
+                        var isOnLine = await this._JSRuntime.InvokeAsync<bool>("Toolbelt.Blazor.getProperty", "navigator.onLine");
+                        var scriptPath = "./_content/Toolbelt.Blazor.SpeechRecognition/script.module.min.js";
+                        if (isOnLine) scriptPath += $"?v={this.GetVersionText()}";
+
+                        this._JSModule = await this._JSRuntime.InvokeAsync<IJSObjectReference>("import", scriptPath);
+                    }
+                    else
+                    {
+                        try { await this._JSRuntime.InvokeVoidAsync("eval", "Toolbelt.Blazor.SpeechRecognition.ready"); } catch { }
+                    }
+                    this._scriptLoaded = true;
                 }
             }
-            finally { this.Syncer.Release(); }
+            finally { this._syncer.Release(); }
         }
-        return await this._JSRuntime.InvokeAsync<T>(Prefix + identifier, args);
+
+        if (this._JSModule != null)
+            return await this._JSModule.InvokeAsync<T>(identifier, args);
+        else
+            return await this._JSRuntime.InvokeAsync<T>(Prefix + identifier, args);
+    }
+
+    private string GetVersionText()
+    {
+        var assembly = this.GetType().Assembly;
+        var version = assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion ?? assembly.GetName().Version?.ToString() ?? "0.0.0";
+        return version;
     }
 
     private DotNetObjectReference<SpeechRecognition> GetObjectRef()
     {
-        if (this._ObjectRefOfThis == null) this._ObjectRefOfThis = DotNetObjectReference.Create(this);
-        return this._ObjectRefOfThis;
+        this._objectRefOfThis ??= DotNetObjectReference.Create(this);
+        return this._objectRefOfThis;
     }
 
     internal SpeechRecognition Attach()
@@ -96,7 +103,12 @@ public class SpeechRecognition
 
     public ValueTask StartAsync()
     {
-        return this.InvokeJSVoidAsync("start");
+        return this.InvokeJSVoidAsync("start", new
+        {
+            lang = this.Lang,
+            continuous = this.Continuous,
+            interimResults = this.InterimResults,
+        });
     }
 
     public ValueTask StopAsync()
@@ -114,5 +126,15 @@ public class SpeechRecognition
     public void _OnEnd()
     {
         this.End?.Invoke(this, EventArgs.Empty);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        if (this._JSModule != null)
+        {
+            try { await this._JSModule.DisposeAsync(); }
+            catch (JSDisconnectedException) { }
+        }
     }
 }
