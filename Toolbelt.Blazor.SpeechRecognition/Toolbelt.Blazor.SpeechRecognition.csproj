@@ -19,8 +19,15 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PackageOutputPath>..\_dist\</PackageOutputPath>
     <PackageReleaseNotes>(Please write the package release notes in "../RELEASE-NOTES.txt")</PackageReleaseNotes>
+    <PackageIcon>nupkg-icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\.assets\nupkg-icon.png" Visible="false" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Visible="false" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
