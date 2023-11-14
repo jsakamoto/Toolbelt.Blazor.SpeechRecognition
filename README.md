@@ -6,12 +6,12 @@ This is a class library for Blazor app to provide Speech Recognition API access.
 
 ## Requirements
 
-[Blazor](https://blazor.net/) v.3.1.0 Preview 4, 3.2, 5.0 or later.
+[Blazor](https://blazor.net/) v.6.0, 7.0, 8.0 or later.
 
-Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server App" (a.k.a."Server-side Blazor") are supoorted.
+Both "Blazor WebAssembly" and "Blazor Server" are supoorted.
 
 
-## How to install and use?
+## Quick Start
 
 ### 1. Installation and Registration
 
@@ -21,38 +21,19 @@ Both "Blazor WebAssembly App" (a.k.a."Client-side Blazor") and "Blazor Server Ap
 > dotnet add package Toolbelt.Blazor.SpeechRecognition --prerelease
 ```
 
-**Step.1-2** Register "SpeechRecognition" service into the DI container.
+**Step.1-2** Register `SpeechRecognition` service into the DI container.
 
 If the project is a Blazor Server App or a Blazor WebAssembly App ver.3.1 Preview 4 or earlyer, add the code into the `ConfigureService` method in the `Startup` class of your Blazor application.
-
-```csharp
-// Startup.cs
-
-using Toolbelt.Blazor.Extensions.DependencyInjection; // <- Add this, and...
-...
-public class Startup
-{
-  public void ConfigureServices(IServiceCollection services)
-  {
-    services.AddSpeechRecognition(); // <- Add this line.
-    ...
-```
-
-If the project is a Blazor WebAssembly App ver.3.2 Preview 1 or later, add the code into the `Main` method in the `Program` class of your Blazor application.
 
 ```csharp
 // Program.cs
 
 using Toolbelt.Blazor.Extensions.DependencyInjection; // <- Add this, and...
 ...
-public class Program
-{
-  public static async Task Main(string[] args)
-  {
-    var builder = WebAssemblyHostBuilder.CreateDefault(args);
-    ...
-    builder.Services.AddSpeechRecognition(); // <- Add this line.
-    ...
+var builder = ...
+...
+builder.Services.AddSpeechRecognition(); // <- Add this line.
+...
 ```
 
 ### 2. Usage in your Blazor component (.razor)
@@ -74,7 +55,7 @@ protected override void OnInitialized()
   this.SpeechRecognition.Result += OnSpeechRecognized;
 }
 
-void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
+private void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
 {
   // DO SOMETHING...
 }
@@ -83,7 +64,7 @@ void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
 **Step.2-3** Invoke `StartAsync()` method of the SpeechRecognition service when you want to start speech recognition.
 
 ```csharp
-async Task OnClickStart()
+private async Task OnClickStart()
 {
   await this.SpeechRecognition.StartAsync();
 }
@@ -126,13 +107,7 @@ You can inject the helper JavaScript file manually. The URLs is bellow:
 
 ## Release Note
 
-- **v.0.0.5-alpha** - Fix: the `DisableClientScriptAutoInjection` option is not assignable.
-- **v.0.0.4-alpha**
-    - Upgrade Blazor to v.3.1.0 Preview 4.
-    - Add support for Blazor Server App (Server-side Blazor).
-- **v.0.0.3-alpha** - Upgrade Blazor to v.3.0.0 Preview 9.
-- **v.0.0.2-alpha** - Upgrade Blazor to v.3.0.0 Preview 6.
-- **v.0.0.1-alpha** - 1st release.
+Release notes is [here](https://github.com/jsakamoto/Toolbelt.Blazor.SpeechRecognition/blob/master/RELEASE-NOTES.txt).
 
 ## License
 
