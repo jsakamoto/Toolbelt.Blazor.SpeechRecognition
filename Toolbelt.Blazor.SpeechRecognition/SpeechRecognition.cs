@@ -4,6 +4,9 @@ using Microsoft.JSInterop;
 
 namespace Toolbelt.Blazor.SpeechRecognition;
 
+/// <summary>
+/// The service allows us to access the Speech Recognition API of Web browsers.
+/// </summary>
 public class SpeechRecognition : IAsyncDisposable
 {
     private static readonly string Prefix = "Toolbelt.Blazor.SpeechRecognition.";
@@ -16,16 +19,35 @@ public class SpeechRecognition : IAsyncDisposable
 
     private DotNetObjectReference<SpeechRecognition>? _objectRefOfThis;
 
+    /// <summary>
+    /// Occurs when the speech recognition service returns a result of recognition of a word or phrase.
+    /// </summary>
     public event EventHandler<SpeechRecognitionEventArgs>? Result;
 
+    /// <summary>
+    /// Occurs when the speech recognition service has disconnected.
+    /// </summary>
     public event EventHandler? End;
 
+    /// <summary>
+    /// Gets or sets the language of the current SpeechRecognition object.
+    /// </summary>
     public string? Lang { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value that indicates whether the speech recognition service should return for each recognition or only a single result.
+    /// </summary>
     public bool Continuous { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value that indicates whether the speech recognition service should return interim results.
+    /// </summary>
     public bool InterimResults { get; set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpeechRecognition"/> class.
+    /// </summary>
+    /// <param name="jsRuntime">The <see cref="IJSRuntime"/> instance.</param>
     public SpeechRecognition(IJSRuntime jsRuntime)
     {
         this._JSRuntime = jsRuntime;
@@ -86,6 +108,9 @@ public class SpeechRecognition : IAsyncDisposable
         return version;
     }
 
+    /// <summary>
+    /// Gets a value that indicates whether the speech recognition service is available on the current device.
+    /// </summary>
     public async ValueTask<bool> IsAvailableAsync()
     {
         var recognizer = await this.GetRecognizerAsync();
@@ -93,6 +118,10 @@ public class SpeechRecognition : IAsyncDisposable
         return await recognizer.InvokeAsync<bool>("available");
     }
 
+    /// <summary>
+    /// Starts the speech recognition service listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition object.
+    /// </summary>
+    /// <returns></returns>
     public async ValueTask StartAsync()
     {
         await this.InvokeRecognizerAsync(r => r.InvokeVoidAsync("start", new
@@ -103,6 +132,9 @@ public class SpeechRecognition : IAsyncDisposable
         }));
     }
 
+    /// <summary>
+    /// Stops the speech recognition service from listening to incoming audio, and doesn't attempt to return a SpeechRecognitionResult any longer.
+    /// </summary>
     public ValueTask StopAsync() => this.InvokeRecognizerAsync(r => r.InvokeVoidAsync("stop"));
 
     [JSInvokable(nameof(_OnResult)), EditorBrowsable(EditorBrowsableState.Never)]
