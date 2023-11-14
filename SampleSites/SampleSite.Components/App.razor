@@ -3,18 +3,22 @@
 @implements IDisposable
 
 <div>
-    <select @onchange="OnChangeLang" disabled="@(IsListening)">
+    SpeechRecognition API is @(_available ? "available" : "not available").
+</div>
+
+<div>
+    <select @onchange="OnChangeLang" disabled="@(_isListening || !_available)">
         <option selected>en-US</option>
         <option>ja-JP</option>
     </select>
 </div>
 
-<button @onclick="OnClickStart" disabled="@(IsListening)">start</button>
+<button @onclick="OnClickStart" disabled="@(_isListening || !_available)">start</button>
 
-<button @onclick="OnClickStop" disabled="@(!IsListening)">stop</button>
+<button @onclick="OnClickStop" disabled="@(!_isListening)">stop</button>
 
 <div>
-    @foreach (var result in this.Results)
+    @foreach (var result in this._results)
     {
         if (result.IsFinal)
         {
@@ -27,11 +31,13 @@
     }
 </div>
 
-@code {
+@code
+{
+    private SpeechRecognitionResult[] _results = Array.Empty<SpeechRecognitionResult>();
 
-    SpeechRecognitionResult[] Results = new SpeechRecognitionResult[0];
+    private bool _available = true;
 
-    bool IsListening = false;
+    private bool _isListening = false;
 
     protected override void OnInitialized()
     {
@@ -42,6 +48,15 @@
         this.SpeechRecognition.End += OnSpeechEnded;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this._available = await this.SpeechRecognition.IsAvailableAsync();
+            this.StateHasChanged();
+        }
+    }
+
     private void OnChangeLang(ChangeEventArgs args)
     {
         this.SpeechRecognition.Lang = args.Value.ToString();
@@ -49,33 +64,33 @@
 
     private void OnSpeechRecognized(object sender, SpeechRecognitionEventArgs args)
     {
-        this.Results = args.Results.Skip(args.ResultIndex).ToArray();
+        this._results = args.Results.Skip(args.ResultIndex).ToArray();
         this.StateHasChanged();
     }
 
     private async Task OnClickStart()
     {
-        if (!this.IsListening)
+        if (!this._isListening)
         {
-            this.IsListening = true;
+            this._isListening = true;
             await this.SpeechRecognition.StartAsync();
         }
     }
 
     private async Task OnClickStop()
     {
-        if (this.IsListening)
+        if (this._isListening)
         {
-            this.IsListening = false;
+            this._isListening = false;
             await this.SpeechRecognition.StopAsync();
         }
     }
 
     private void OnSpeechEnded(object sender, EventArgs args)
     {
-        if (this.IsListening)
+        if (this._isListening)
         {
-            this.IsListening = false;
+            this._isListening = false;
             this.StateHasChanged();
         }
     }
