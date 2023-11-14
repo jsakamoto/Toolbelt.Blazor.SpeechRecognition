@@ -1,37 +1,27 @@
-let speechRecognition = null;
-let dotnetObjRef = null;
-let w = window;
-export const attach = (objRef) => {
-    dotnetObjRef = objRef;
+export const createInstance = (dotnetObjRef) => {
+    const w = window;
     const TSpeechRecognition = w.webkitSpeechRecognition || w.SpeechRecognition;
-    if (!speechRecognition && TSpeechRecognition) {
-        speechRecognition = new TSpeechRecognition();
-        speechRecognition.onresult = (ev) => {
-            dotnetObjRef?.invokeMethodAsync('_OnResult', {
-                resultIndex: ev.resultIndex,
-                results: Array.from(ev.results).map(result => ({
-                    isFinal: result.isFinal,
-                    items: Array.from(result).map(item => ({
-                        confidence: item.confidence,
-                        transcript: item.transcript
-                    }))
+    const speechRecognition = TSpeechRecognition ? new TSpeechRecognition() : null;
+    const falseFunc = () => false;
+    const invokeMethodAsync = dotnetObjRef.invokeMethodAsync.bind(dotnetObjRef);
+    if (!speechRecognition)
+        return ({ available: falseFunc, start: falseFunc, stop: falseFunc });
+    speechRecognition.onresult = (ev) => {
+        invokeMethodAsync('_OnResult', {
+            resultIndex: ev.resultIndex,
+            results: Array.from(ev.results).map(result => ({
+                isFinal: result.isFinal,
+                items: Array.from(result).map(item => ({
+                    confidence: item.confidence,
+                    transcript: item.transcript
                 }))
-            });
-        };
-        speechRecognition.onend = () => {
-            dotnetObjRef.invokeMethodAsync('_OnEnd');
-        };
-    }
-    return speechRecognition !== null;
-};
-export const start = (options) => {
-    if (speechRecognition) {
-        Object.assign(speechRecognition, options);
-        speechRecognition.start();
-    }
-};
-export const stop = () => {
-    if (speechRecognition) {
-        speechRecognition.stop();
-    }
+            }))
+        });
+    };
+    speechRecognition.onend = () => invokeMethodAsync('_OnEnd');
+    return ({
+        available: () => true,
+        start: (options) => Object.assign(speechRecognition, options).start(),
+        stop: () => speechRecognition.stop()
+    });
 };

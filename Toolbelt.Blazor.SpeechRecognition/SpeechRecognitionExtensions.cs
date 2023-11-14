@@ -22,12 +22,11 @@ public static class SpeechRecognitionExtensions
     /// <param name="configure">A delegate that is used to configure the SpeechRecognitionOptions.</param>
     public static IServiceCollection AddSpeechRecognition(this IServiceCollection services, Action<SpeechRecognitionOptions>? configure)
     {
-        services.AddScoped(serviceProvider =>
+        services.AddTransient(serviceProvider =>
         {
             var jsRuntime = serviceProvider.GetRequiredService<IJSRuntime>();
             var speechRecognitionService = new global::Toolbelt.Blazor.SpeechRecognition.SpeechRecognition(jsRuntime);
             configure?.Invoke(speechRecognitionService.Options);
-            speechRecognitionService.Attach();
             return speechRecognitionService;
         });
         return services;

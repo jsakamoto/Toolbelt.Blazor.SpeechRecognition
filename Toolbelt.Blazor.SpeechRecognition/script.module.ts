@@ -25,46 +25,33 @@ interface DotNetObjectRef {
     invokeMethodAsync(methodName: string, ...args: any[]): Promise<any>;
 }
 
-let speechRecognition: SpeechRecognition | null = null;
-let dotnetObjRef: DotNetObjectRef | null = null;
-let w = window;
-
-export const attach = (objRef: DotNetObjectRef): boolean => {
-    dotnetObjRef = objRef;
+export const createInstance = (dotnetObjRef: DotNetObjectRef) => {
+    const w = window;
     const TSpeechRecognition = w.webkitSpeechRecognition || w.SpeechRecognition;
+    const speechRecognition = TSpeechRecognition ? new TSpeechRecognition() : null;
+    const falseFunc = () => false;
+    const invokeMethodAsync = dotnetObjRef.invokeMethodAsync.bind(dotnetObjRef);
 
-    if (!speechRecognition && TSpeechRecognition) {
-        speechRecognition = new TSpeechRecognition();
+    if (!speechRecognition) return ({ available: falseFunc, start: falseFunc, stop: falseFunc });
 
-        speechRecognition.onresult = (ev) => {
-            dotnetObjRef?.invokeMethodAsync('_OnResult', {
-                resultIndex: ev.resultIndex,
-                results: Array.from(ev.results).map(result => ({
-                    isFinal: result.isFinal,
-                    items: Array.from(result).map(item => ({
-                        confidence: item.confidence,
-                        transcript: item.transcript
-                    }))
+    speechRecognition.onresult = (ev) => {
+        invokeMethodAsync('_OnResult', {
+            resultIndex: ev.resultIndex,
+            results: Array.from(ev.results).map(result => ({
+                isFinal: result.isFinal,
+                items: Array.from(result).map(item => ({
+                    confidence: item.confidence,
+                    transcript: item.transcript
                 }))
-            });
-        }
-
-        speechRecognition.onend = () => {
-            dotnetObjRef!.invokeMethodAsync('_OnEnd');
-        }
+            }))
+        });
     }
-    return speechRecognition !== null;
-}
 
-export const start = (options: SpeechRecognitionOptions) => {
-    if (speechRecognition) {
-        Object.assign(speechRecognition, options);
-        speechRecognition.start();
-    }
-}
+    speechRecognition.onend = () => invokeMethodAsync('_OnEnd');
 
-export const stop = () => {
-    if (speechRecognition) {
-        speechRecognition.stop();
-    }
+    return ({
+        available: () => true,
+        start: (options: SpeechRecognitionOptions) => Object.assign(speechRecognition, options).start(),
+        stop: () => speechRecognition.stop()
+    });
 }
