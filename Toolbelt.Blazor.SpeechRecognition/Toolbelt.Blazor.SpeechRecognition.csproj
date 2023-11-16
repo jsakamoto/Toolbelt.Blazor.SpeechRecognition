@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+    <IsTrimmable>true</IsTrimmable>
+    <PrepareForBuildDependsOn>$(PrepareForBuildDependsOn);UpdateILLinkSubstitutionsXml</PrepareForBuildDependsOn>
     <TypeScriptToolsVersion>5.0</TypeScriptToolsVersion>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <Version>0.0.5-alpha</Version>
@@ -26,6 +28,15 @@
   <ItemGroup>
     <None Include="..\.assets\nupkg-icon.png" Visible="false" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Visible="false" Pack="true" PackagePath="\" />
+    <None Include="PackageSrc\Build\Toolbelt.Blazor.SpeechRecognition.targets" Pack="true" PackagePath="build\Toolbelt.Blazor.SpeechRecognition.targets" />
+    <None Include="PackageSrc\BuildMultiTargeting\Toolbelt.Blazor.SpeechRecognition.targets" Pack="true" PackagePath="buildMultiTargeting\Toolbelt.Blazor.SpeechRecognition.targets" />
+    <None Include="PackageSrc\BuildTransitive\Toolbelt.Blazor.SpeechRecognition.targets" Pack="true" PackagePath="buildTransitive\Toolbelt.Blazor.SpeechRecognition.targets" />
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ILLink.Substitutions.xml">
+      <LogicalName>ILLink.Substitutions.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
@@ -59,6 +70,10 @@
       <Pack>false</Pack>
     </Content>
   </ItemGroup>
+
+  <Target Name="UpdateILLinkSubstitutionsXml">
+    <XmlPoke XmlInputPath="ILLink.Substitutions.xml" Query="/linker/assembly/type/method[@signature='System.String GetVersionText()']/@value" Value="$(Version)" />
+  </Target>
 
   <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
     <ReadLinesFromFile File="../RELEASE-NOTES.txt">

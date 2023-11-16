@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <assembly fullname="Toolbelt.Blazor.SpeechRecognition">
+    <type fullname="Toolbelt.Blazor.SpeechRecognition.SpeechRecognition">
+      <method signature="System.String GetVersionText()" body="stub" value="0.0.5-alpha" />
+    </type>
+  </assembly>
+</linker>

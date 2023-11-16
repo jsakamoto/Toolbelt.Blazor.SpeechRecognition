@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <ToolbeltBlazorSpeechRecognitionOptimizeForWasm Condition=" '$(ToolbeltBlazorSpeechRecognitionOptimizeForWasm)' == '' ">true</ToolbeltBlazorSpeechRecognitionOptimizeForWasm>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'browser-wasm' AND '$(ToolbeltBlazorSpeechRecognitionOptimizeForWasm)' == 'true' ">
+    <RuntimeHostConfigurationOption Include="Toolbelt.Blazor.SpeechRecognition.OptimizeForWasm" Value="true" Trim="true" />
+  </ItemGroup>
+
+</Project>

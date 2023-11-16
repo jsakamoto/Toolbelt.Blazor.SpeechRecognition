@@ -124,11 +124,11 @@ public class SpeechRecognition : IAsyncDisposable
     /// <returns></returns>
     public async ValueTask StartAsync()
     {
-        await this.InvokeRecognizerAsync(r => r.InvokeVoidAsync("start", new
+        await this.InvokeRecognizerAsync(r => r.InvokeVoidAsync("start", new SpeechRecognitionStartOptions
         {
-            lang = this.Lang,
-            continuous = this.Continuous,
-            interimResults = this.InterimResults,
+            Lang = this.Lang,
+            Continuous = this.Continuous,
+            InterimResults = this.InterimResults,
         }));
     }
 
