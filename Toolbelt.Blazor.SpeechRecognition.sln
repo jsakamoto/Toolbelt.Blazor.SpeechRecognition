@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28809.33
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34302.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolbelt.Blazor.SpeechRecognition", "Toolbelt.Blazor.SpeechRecognition\Toolbelt.Blazor.SpeechRecognition.csproj", "{F4FBD89A-7024-4A8C-A045-2B313295F466}"
 EndProject
@@ -17,6 +17,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSite.Client", "SampleSites\SampleSite.Client\SampleSite.Client.csproj", "{64E88DAA-A721-4D58-B80C-7B0262123937}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSite.Server", "SampleSites\SampleSite.Server\SampleSite.Server.csproj", "{59149CDD-38A1-4D1D-9D1A-07A15465A858}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET8", "NET8", "{E2622C78-2FE6-4655-95EF-2B4D419A7D50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1", "SampleSites\Net8App\BlazorApp1\BlazorApp1\BlazorApp1.csproj", "{80EF9BF4-1245-4779-9C6B-7445897AACBD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1.Client", "SampleSites\Net8App\BlazorApp1\BlazorApp1.Client\BlazorApp1.Client.csproj", "{439B2B76-EF14-4477-A603-D42E91C5586E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +46,14 @@ Global
 		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59149CDD-38A1-4D1D-9D1A-07A15465A858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80EF9BF4-1245-4779-9C6B-7445897AACBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80EF9BF4-1245-4779-9C6B-7445897AACBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80EF9BF4-1245-4779-9C6B-7445897AACBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80EF9BF4-1245-4779-9C6B-7445897AACBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{439B2B76-EF14-4477-A603-D42E91C5586E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{439B2B76-EF14-4477-A603-D42E91C5586E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{439B2B76-EF14-4477-A603-D42E91C5586E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{439B2B76-EF14-4477-A603-D42E91C5586E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +62,9 @@ Global
 		{363C0011-36CD-4FDB-8842-D04B364E4B40} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
 		{64E88DAA-A721-4D58-B80C-7B0262123937} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
 		{59149CDD-38A1-4D1D-9D1A-07A15465A858} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
+		{E2622C78-2FE6-4655-95EF-2B4D419A7D50} = {8179E9F9-CDA1-45C9-B756-201E199C42EF}
+		{80EF9BF4-1245-4779-9C6B-7445897AACBD} = {E2622C78-2FE6-4655-95EF-2B4D419A7D50}
+		{439B2B76-EF14-4477-A603-D42E91C5586E} = {E2622C78-2FE6-4655-95EF-2B4D419A7D50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CCF99FF-7770-4E09-B6F9-61BD869AC7A7}

@@ -1,0 +1,121 @@
+﻿@using System.Runtime.InteropServices
+@implements IDisposable
+@inject SpeechRecognition SpeechRecognition
+
+<div class="d-flex flex-column gap-4">
+
+    <div>
+        <dl>
+            <dt>Running on:</dt>
+            <dd>@RuntimeInformation.ProcessArchitecture</dd>
+            <dt>SpeechRecognition API:</dt>
+            <dd>@(_available ? "Available" : "Not Available")</dd>
+        </dl>
+    </div>
+
+    <div>
+        <select @onchange="OnChangeLang" disabled="@(_isListening || !_available)" class="form-select">
+            @foreach (var lang in _langs)
+            {
+                <option selected="@(this.SpeechRecognition.Lang == lang)">@lang</option>
+            }
+        </select>
+    </div>
+
+    <div class="d-flex flex-row gap-2">
+
+        <button @onclick="OnClickStart" disabled="@(_isListening || !_available)" class="btn btn-primary">
+            Start
+        </button>
+
+        <button @onclick="OnClickStop" disabled="@(!_isListening)" class="btn btn-primary">
+            Stop
+        </button>
+
+    </div>
+
+
+    <div>
+        @foreach (var result in this._results)
+        {
+            if (result.IsFinal)
+            {
+                <text>@result.Items![0].Transcript</text>
+            }
+            else
+            {
+                <i style="color:#ddd;">@result.Items![0].Transcript</i>
+            }
+        }
+    </div>
+
+</div>
+
+@code
+{
+    private IEnumerable<string> _langs = ["en-US", "ja-JP"];
+
+    private SpeechRecognitionResult[] _results = [];
+
+    private bool _available = true;
+
+    private bool _isListening = false;
+
+    protected override void OnInitialized()
+    {
+        this.SpeechRecognition.Lang = "en-US";
+        this.SpeechRecognition.InterimResults = true;
+        this.SpeechRecognition.Continuous = true;
+        this.SpeechRecognition.Result += OnSpeechRecognized;
+        this.SpeechRecognition.End += OnSpeechEnded;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this._available = await this.SpeechRecognition.IsAvailableAsync();
+            this.StateHasChanged();
+        }
+    }
+
+    private void OnChangeLang(ChangeEventArgs args)
+    {
+        this.SpeechRecognition.Lang = args.Value?.ToString() ?? "en-US";
+    }
+
+    private void OnSpeechRecognized(object? sender, SpeechRecognitionEventArgs args)
+    {
+        this._results = args.Results?.Skip(args.ResultIndex).ToArray() ?? [];
+        this.StateHasChanged();
+    }
+
+    private async Task OnClickStart()
+    {
+        if (this._isListening) return;
+        this._isListening = true;
+        await this.SpeechRecognition.StartAsync();
+    }
+
+    private async Task OnClickStop()
+    {
+        if (!this._isListening) return;
+        this._isListening = false;
+        await this.SpeechRecognition.StopAsync();
+    }
+
+    private void OnSpeechEnded(object? sender, EventArgs args)
+    {
+        if (this._isListening)
+        {
+            this._isListening = false;
+            this.StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        this.SpeechRecognition.Result -= OnSpeechRecognized;
+        this.SpeechRecognition.End -= OnSpeechEnded;
+    }
+}
