@@ -2,7 +2,7 @@
 <linker>
   <assembly fullname="Toolbelt.Blazor.SpeechRecognition">
     <type fullname="Toolbelt.Blazor.SpeechRecognition.SpeechRecognition">
-      <method signature="System.String GetVersionText()" body="stub" value="0.0.5-alpha" />
+      <method signature="System.String GetVersionText()" body="stub" value="1.0.0" />
     </type>
   </assembly>
 </linker>

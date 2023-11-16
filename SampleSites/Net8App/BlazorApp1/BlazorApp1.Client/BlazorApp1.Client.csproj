@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Toolbelt.Blazor.SpeechRecognition\Toolbelt.Blazor.SpeechRecognition.csproj" />
+    <!--<ProjectReference Include="..\..\..\..\Toolbelt.Blazor.SpeechRecognition\Toolbelt.Blazor.SpeechRecognition.csproj" />-->
+    <PackageReference Include="Toolbelt.Blazor.SpeechRecognition" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

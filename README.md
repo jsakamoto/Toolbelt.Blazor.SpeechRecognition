@@ -18,7 +18,7 @@ Both "Blazor WebAssembly" and "Blazor Server" are supoorted.
 **Step.1-1** Install the library via NuGet package, like this.
 
 ```shell
-> dotnet add package Toolbelt.Blazor.SpeechRecognition --prerelease
+> dotnet add package Toolbelt.Blazor.SpeechRecognition
 ```
 
 **Step.1-2** Register `SpeechRecognition` service into the DI container.

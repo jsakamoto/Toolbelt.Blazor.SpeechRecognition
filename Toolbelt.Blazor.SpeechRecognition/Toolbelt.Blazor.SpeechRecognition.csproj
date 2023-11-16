@@ -9,7 +9,7 @@
     <PrepareForBuildDependsOn>$(PrepareForBuildDependsOn);UpdateILLinkSubstitutionsXml</PrepareForBuildDependsOn>
     <TypeScriptToolsVersion>5.0</TypeScriptToolsVersion>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <Version>0.0.5-alpha</Version>
+    <Version>1.0.0</Version>
     <Authors>J.Sakamoto</Authors>
     <Description>SpeechRecognition API access for your Blazor apps.</Description>
     <Copyright>Copyright © 2019-2023 J.Sakamoto, Mozilla Public License 2.0</Copyright>

@@ -1,3 +1,6 @@
+v.1.0.0
+- Support to .NET 8 and IL trimming.
+
 v.0.0.5-alpha
 - Fix: the "DisableClientScriptAutoInjection" option is not assignable.
 
